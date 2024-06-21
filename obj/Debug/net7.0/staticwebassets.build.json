@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "eB4KIT3LCYDx666Tw518fHNt/7170PY1zYfzME6hIN0=",
+  "Source": "SampleAppWithCaching",
+  "BasePath": "_content/SampleAppWithCaching",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
