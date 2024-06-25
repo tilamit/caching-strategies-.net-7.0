@@ -1,5 +1,5 @@
 ﻿﻿<h2 align="center">
-    <a style="text-decoration:none;" href="https://github.com/tilamit/locking-strategies-.net-7.0">
+    <a style="text-decoration:none;" href="https://github.com/tilamit/caching-strategies-.net-7.0">
       Caching Strategies With .NET
     </a>
     <br/>
