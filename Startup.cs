@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SampleAppWithCaching.Interface;
 using SampleAppWithCaching.Repository;
 using SampleAppWithCaching.UserDbContext;
+using EasyCaching.Core.Configurations;
 
 namespace SampleAppWithCaching
 {
@@ -17,17 +18,15 @@ namespace SampleAppWithCaching
         // This method gets called by the runtime. Use this method to add serices to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddControllersWithViews();
-            //services.AddMvc();
             services.AddControllers();
             services.AddResponseCaching();
 
-            //Fetching Connection string from APPSETTINGS.JSON  
+            //Get connection string from appsettings.json
             var ConnectionString = Configuration.GetConnectionString("DbConnectionString");
 
             //Entity Framework  
             services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(ConnectionString));
-            
+
             services.AddMemoryCache();
             services.AddScoped<ICacheProvider, CacheProvider>();
 
@@ -42,6 +41,36 @@ namespace SampleAppWithCaching
             });
             services.AddScoped<IUser, UserRepository>();
 
+            //Configure the redis caching provider  
+            //Configuration 1
+            services.AddEasyCaching(option =>
+            {
+                //use redis cache
+                option.UseRedis(config =>
+                {
+                    config.DBConfig.Endpoints.Add(new ServerEndPoint("localhost", 6380));
+                    config.DBConfig.ConnectionTimeout = 20000;
+                    config.DBConfig.AsyncTimeout = 30000;
+                    config.DBConfig.AbortOnConnectFail = false;
+                    config.SerializerName = "mymsgpack";
+                    config.MaxRdSecond = 0;
+                }, "redis2")
+                .WithMessagePack("mymsgpack")//with messagepack serialization
+                ;
+
+                //Configuration 2
+                option.UseRedis(config =>
+                {
+                    config.DBConfig.Endpoints.Add(new ServerEndPoint("localhost", 6382));
+                    config.DBConfig.ConnectionTimeout = 20000;
+                    config.DBConfig.AsyncTimeout = 30000;
+                    config.DBConfig.AbortOnConnectFail = false;
+                    config.SerializerName = "mymsgpack";
+                    config.MaxRdSecond = 0;
+                }, "redis4")
+                .WithMessagePack("mymsgpack")//with messagepack serialization
+                ;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

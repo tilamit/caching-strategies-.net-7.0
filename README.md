@@ -1,5 +1,5 @@
-﻿﻿<h2 align="center">
-    <a style="text-decoration:none;" href="https://github.com/tilamit/locking-strategies-.net-7.0">
+﻿﻿﻿<h2 align="center">
+    <a style="text-decoration:none;" href="https://github.com/tilamit/caching-strategies-.net-7.0">
       Caching Strategies With .NET
     </a>
     <br/>
@@ -31,6 +31,8 @@ When we work on a project, say a database-driven one, in that case user sends re
 **In-memory / Client Caching** - These two can be implemented in the application-level, that means the cache could be controlled in the server-side and on client-side. For server-side, the app creates an object that occupies storage on the server itself and later that storage serves as the cache. On the other hand, for client-side, the cache is handled by browser and data gets retrieved from browser cache for later usage. 
 
 **Distributed Caching** - For distributed caching, we can consider a separate server that deals with caching and even it can have multiple servers to distribute the caching mechanism for better app performance. In this scenario, caching isn't bound to application-level and each server works as a gateway for caching service.
+
+**N.B**: For the time being, this repo focuses on the in-memory / client caching. Later distributed caching would be added as well. 
 
 ## Built With
 
@@ -103,9 +105,33 @@ select * from Users m;
 
 The above will generate thousand dummy data in the **Users** table and it can be modified to generate more dummy data if required.
 
+* Redis
+
+For distributed caching, **Redis** has been used and to make it work in the project, an open source library **EasyCaching** is integrated. You can have a look on the library here - [EasyCaching](https://github.com/dotnetcore/EasyCaching).
+
+To work with **Redis**, I used docker container. In order to run the container, you have to install docker / docker desktop. Then run the following in command prompt to pull the docker image as follows (I do it mostly with admin privilege):
+
+```sh
+docker pull redis
+```
+
+Once done, use the following to run the **Redis** container:
+
+```sh
+docker run --name redis-2 -d -p 6380:6379 redis
+```
+
+```sh
+docker run --name redis-4 -d -p 6382:6379 redis
+```
+
+I created two instances of **Redis** with different ports to test the caching. By default, it uses the port 6379.
+
+Now we are done with the setup and you can test with JMeter now.
+
 * JMeter
 
-To test the api and see the demo of optimistic locking, you can use JMeter that I used. Here's a link that you can follow - [JMeter Setup](https://loadium.com/blog/how-to-send-jmeter-post-requests).
+To test the api and see the demo of caching strategy, you can use JMeter that I used. Here's a link that you can follow - [JMeter Setup](https://loadium.com/blog/how-to-send-jmeter-post-requests).
 
 It's pretty handy and you can download it from here - [Download JMeter](https://jmeter.apache.org/download_jmeter.cgi). 
 

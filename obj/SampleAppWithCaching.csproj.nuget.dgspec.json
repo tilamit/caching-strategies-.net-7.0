@@ -40,6 +40,14 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "EasyCaching.Redis": {
+              "target": "Package",
+              "version": "[1.9.2, )"
+            },
+            "EasyCaching.Serialization.MessagePack": {
+              "target": "Package",
+              "version": "[1.9.2, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[7.0.0, )"
