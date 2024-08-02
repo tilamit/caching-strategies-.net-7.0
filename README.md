@@ -32,8 +32,6 @@ When we work on a project, say a database-driven one, in that case user sends re
 
 **Distributed Caching** - For distributed caching, we can consider a separate server that deals with caching and even it can have multiple servers to distribute the caching mechanism for better app performance. In this scenario, caching isn't bound to application-level and each server works as a gateway for caching service.
 
-**N.B**: For the time being, this repo focuses on the in-memory / client caching. Later distributed caching would be added as well. 
-
 ## Built With
 
 #### Environment & Development Tools：
