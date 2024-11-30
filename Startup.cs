@@ -23,6 +23,7 @@ namespace SampleAppWithCaching
 
             //Get connection string from appsettings.json
             var ConnectionString = Configuration.GetConnectionString("DbConnectionString");
+            var ConnectionStringDocker = Configuration.GetConnectionString("DbConnectionStringDocker");
 
             //Entity Framework  
             services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(ConnectionString));
@@ -39,7 +40,9 @@ namespace SampleAppWithCaching
                         Location = ResponseCacheLocation.Any
                     });
             });
+
             services.AddScoped<IUser, UserRepository>();
+            services.AddScoped<IUserSqlServerCache, UserSqlServerCacheRepository>();
 
             //Configure the redis caching provider  
             //Configuration 1
@@ -70,6 +73,13 @@ namespace SampleAppWithCaching
                 }, "redis4")
                 .WithMessagePack("mymsgpack")//with messagepack serialization
                 ;
+            });
+
+            services.AddDistributedSqlServerCache(options =>
+            {
+                options.ConnectionString = ConnectionStringDocker;
+                options.SchemaName = "dbo";
+                options.TableName = "CacheData";
             });
         }
 

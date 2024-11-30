@@ -1,4 +1,4 @@
-﻿﻿﻿<h2 align="center">
+﻿﻿﻿﻿<h2 align="center">
     <a style="text-decoration:none;" href="https://github.com/tilamit/caching-strategies-.net-7.0">
       Caching Strategies With .NET
     </a>
@@ -138,6 +138,53 @@ When installation done, do the followings to work with the project as shown in t
 Threads (Users) -> Thread Group             |  HTTP Post Request
 :-------------------------:|:-------------------------:
 ![](https://i.postimg.cc/NjHLGVTN/HTTP-Request-jmx-C-Users-Hp-Downloads-HTTP-Request-jmx-Apache-JMeter-5-6-3-19-06-2024-17-20-5.png)  |  ![](https://i.postimg.cc/NjmfvXqS/HTTP-Request-jmx-C-Users-Hp-Downloads-HTTP-Request-jmx-Apache-JMeter-5-6-3-19-06-2024-17-22-3.png)
+
+* Caching With SQL Server
+
+We can implement distributed caching with the help of SQL Server. In this case and for testing purpose, we would be using docker container on Linux environment or local SQL Server could be used as well.
+
+This is what I used for the docker container as follows:
+
+```sh
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=MySuperStrongPassword1!' -p 1432:1433 --name sqltest -d mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+```
+
+The above helped me a lot when I was exploring for the SQL Server docker container and faced issues. It would be incomplete if I don't provide the credit and you guys can check it out if you face the same issue:
+
+* [Chirag Darji](https://medium.com/@chiragrdarji/docker-container-sql-server-exited-1-status-b7d7131c289b)
+
+Install the below package in the project:
+
+```sh
+PM> Install-Package Microsoft.Extensions.Caching.SqlServer
+```
+
+Use the following table for the caching strategy to store the cached data when you successfully start the docker container for SQL Server or the one you locally have:
+
+~~~ sql
+USE [SampleDb]
+GO
+
+/****** Object:  Table [dbo].[CacheData]    Script Date: 30/11/2024 18:15:51 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CacheData](
+	[Id] [nvarchar](449) NOT NULL,
+	[Value] [varbinary](max) NOT NULL,
+	[ExpiresAtTime] [datetimeoffset](7) NOT NULL,
+	[SlidingExpirationInSeconds] [bigint] NULL,
+	[AbsoluteExpiration] [datetimeoffset](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+~~~
 
 ## Authors
 
